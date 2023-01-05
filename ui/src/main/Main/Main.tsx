@@ -2,7 +2,7 @@ import React from "react";
 import useLoginOnApiKey from "./useLoginOnApiKey";
 import useLocalStoragedApiKey from "./useLocalStoragedApiKey";
 import { UserContext } from "contexts";
-import { Top, ForkMe, Routes, Footer, Loader } from "../";
+import { Top, Routes, Footer, Loader } from "../";
 
 export const Main: React.FC = () => {
   const {
@@ -19,9 +19,7 @@ export const Main: React.FC = () => {
   return (
     <>
       <Top />
-      <ForkMe>
-        <Routes />
-      </ForkMe>
+      <Routes />
       <Footer />
     </>
   );

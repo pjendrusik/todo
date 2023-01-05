@@ -17,25 +17,27 @@ class UserModel {
   }
 
   def findById(id: Id @@ User): ConnectionIO[Option[User]] = {
-    findBy(fr"id = $id")
+    findBy(fr"id = $id").option
   }
 
+  def findAll(): ConnectionIO[List[User]] =
+    findBy(fr"1=1").to[List]
+
   def findByEmail(email: String @@ LowerCased): ConnectionIO[Option[User]] = {
-    findBy(fr"email_lowercase = $email")
+    findBy(fr"email_lowercase = $email").option
   }
 
   def findByLogin(login: String @@ LowerCased): ConnectionIO[Option[User]] = {
-    findBy(fr"login_lowercase = $login")
+    findBy(fr"login_lowercase = $login").option
   }
 
   def findByLoginOrEmail(loginOrEmail: String @@ LowerCased): ConnectionIO[Option[User]] = {
-    findBy(fr"login_lowercase = $loginOrEmail OR email_lowercase = $loginOrEmail")
+    findBy(fr"login_lowercase = $loginOrEmail OR email_lowercase = $loginOrEmail").option
   }
 
-  private def findBy(by: Fragment): ConnectionIO[Option[User]] = {
+  private def findBy(by: Fragment): Query0[User] = {
     (sql"SELECT id, login, login_lowercase, email_lowercase, password, created_on FROM users WHERE " ++ by)
       .query[User]
-      .option
   }
 
   def updatePassword(userId: Id @@ User, newPassword: String @@ PasswordHash): ConnectionIO[Unit] =

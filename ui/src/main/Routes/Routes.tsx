@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes as RouterRoutes, Route } from "react-router-dom";
-import { Welcome, Login, Register, RecoverLostPassword, PasswordReset, SecretMain, Profile, NotFound } from "pages";
+import {Welcome, Login, Register, RecoverLostPassword, PasswordReset, SecretMain, Profile, NotFound, ToDo} from "pages";
 import { ProtectedRoute } from "./ProtectedRoute";
 
 export const Routes: React.FC = () => (
@@ -19,6 +19,7 @@ export const Routes: React.FC = () => (
     <Route element={<ProtectedRoute />}>
       <Route path="/main" element={<SecretMain />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/todo" element={<ToDo />} />
     </Route>
 
     <Route path="*" element={<NotFound />} />

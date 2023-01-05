@@ -23,6 +23,7 @@ import sttp.tapir.swagger.bundle.SwaggerInterpreter
   *   - `/api/v1` - the main API
   *   - `/api/v1/docs` - swagger UI for the main API
   *   - `/admin` - admin API
+  *   - `/admin/docs` - swagger UI for the admin API
   *   - `/` - serving frontend resources
   */
 class HttpApi(
@@ -59,13 +60,16 @@ class HttpApi(
     // creating the documentation using `mainEndpoints` without the /api/v1 context path; instead, a server will be added
     // with the appropriate suffix
     val docsEndpoints = SwaggerInterpreter(swaggerUIOptions = SwaggerUIOptions.default.copy(contextPath = apiContextPath))
-      .fromServerEndpoints(mainEndpoints.toList, "Bootzooka", "1.0")
+      .fromServerEndpoints(mainEndpoints.toList, "DemoApp", "1.0")
 
     // for /api/v1 requests, first trying the API; then the docs
     val apiEndpoints =
       (mainEndpoints ++ docsEndpoints).map(se => se.prependSecurityIn(apiContextPath.foldLeft(emptyInput: EndpointInput[Unit])(_ / _)))
 
-    val allAdminEndpoints = (adminEndpoints ++ List(prometheusMetrics.metricsEndpoint)).map(_.prependSecurityIn("admin"))
+    val adminDocsEndpoints = SwaggerInterpreter(swaggerUIOptions = SwaggerUIOptions.default.copy(contextPath = List("admin")))
+      .fromServerEndpoints(adminEndpoints.toList, "DemoApp Admin", "1.0")
+
+    val allAdminEndpoints = (adminEndpoints ++ adminDocsEndpoints ++ List(prometheusMetrics.metricsEndpoint)).map(_.prependSecurityIn("admin"))
 
     // for all other requests, first trying getting existing webapp resource (html, js, css files), from the /webapp
     // directory on the classpath; otherwise, returning index.html; this is needed to support paths in the frontend

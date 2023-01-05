@@ -18,7 +18,7 @@ export const Top: React.FC = () => {
     <Navbar variant="dark" bg="dark" sticky="top" collapseOnSelect expand="lg">
       <Container>
         <LinkContainer to="/">
-          <Navbar.Brand>Bootzooka</Navbar.Brand>
+          <Navbar.Brand>DemoApp</Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -28,6 +28,9 @@ export const Top: React.FC = () => {
             </LinkContainer>
             <LinkContainer to="/main">
               <Nav.Link>Home</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to="/todo">
+              <Nav.Link>ToDo</Nav.Link>
             </LinkContainer>
             <div className="flex-grow-1" />
             {loggedIn ? (

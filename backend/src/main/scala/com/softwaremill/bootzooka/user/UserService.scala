@@ -62,6 +62,8 @@ class UserService(
 
   def findById(id: Id @@ User): ConnectionIO[User] = userOrNotFound(userModel.findById(id))
 
+  def getAll(): ConnectionIO[List[User]] = userModel.findAll()
+
   def login(loginOrEmail: String, password: String, apiKeyValid: Option[Duration]): ConnectionIO[ApiKey] = {
     val loginOrEmailClean = loginOrEmail.trim()
     for {

@@ -13,7 +13,7 @@ test("renders version data", async () => {
 
   const { getByText, findByText, findAllByRole } = render(<Footer />);
 
-  const info = getByText(/Bootzooka - application scaffolding by /);
+  const info = getByText(/DemoApp - application scaffolding by /);
 
   await findAllByRole("loader");
 
