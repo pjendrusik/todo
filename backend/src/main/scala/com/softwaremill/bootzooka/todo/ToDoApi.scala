@@ -24,6 +24,7 @@ case class ToDoApi(http: Http, auth: Auth[ApiKey], toDoService: ToDoService, xa:
       (_ :Unit) =>
         (for {
         todos <- toDoService.findByUserId(userId).transact(xa)
+        _ = println(todos)
       } yield todos).toOut
     )
 

@@ -6,13 +6,14 @@ import com.softwaremill.bootzooka.user.User
 import com.softwaremill.bootzooka.util._
 import com.softwaremill.tagging.@@
 
+import java.time.Instant
+
 class ToDoService(todoModel: ToDoModel, idGenerator: IdGenerator, clock: Clock) {
 
   def newToDo(userId: Id @@ User, request: ToDoApi.NewToDo): ConnectionIO[ToDoEntity] = {
     for {
       id <- idGenerator.nextId[ConnectionIO, ToDoEntity]()
-      now <- clock.now[ConnectionIO]()
-      todo = ToDoEntity(id, userId, request.content, now)
+      todo = ToDoEntity(id, userId, request.content, Instant.now())
       _ <- todoModel.insert(todo)
     } yield todo
   }
