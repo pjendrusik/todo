@@ -9,6 +9,7 @@ import com.softwaremill.bootzooka.email.sender.EmailSender
 import com.softwaremill.bootzooka.http.{Http, HttpApi, HttpConfig}
 import com.softwaremill.bootzooka.metrics.VersionApi
 import com.softwaremill.bootzooka.passwordreset.{PasswordResetApi, PasswordResetAuthToken}
+import com.softwaremill.bootzooka.randomusers.RandomUsersApi
 import com.softwaremill.bootzooka.security.ApiKeyAuthToken
 import com.softwaremill.bootzooka.todo.ToDoApi
 import com.softwaremill.bootzooka.user.UserApi
@@ -34,6 +35,7 @@ object Dependencies {
         adminApi: AdminApi,
         userApi: UserApi,
         toDoApi: ToDoApi,
+        randomUsersApi: RandomUsersApi,
         passwordResetApi: PasswordResetApi,
         versionApi: VersionApi,
         cfg: HttpConfig
@@ -41,7 +43,7 @@ object Dependencies {
       val prometheusMetrics = PrometheusMetrics.default[IO](registry = collectorRegistry)
       new HttpApi(
         http,
-        userApi.endpoints concatNel passwordResetApi.endpoints concatNel toDoApi.endpoints,
+        userApi.endpoints concatNel passwordResetApi.endpoints concatNel toDoApi.endpoints concatNel randomUsersApi.endpoints,
         adminApi.endpoints concatNel NonEmptyList.of(versionApi.versionEndpoint),
         prometheusMetrics,
         cfg

@@ -9,6 +9,7 @@ const todoSchema = Yup.object().required().shape({
   content: Yup.string().required(),
   createdAt: Yup.string().required(),
 });
+
 const newToDo = (apiKey: string | null, params: { content: string; }) =>
   _securedRequest(apiKey, {
     method: "POST",

@@ -7,3 +7,4 @@ export * from "./Register/Register";
 export * from "./SecretMain/SecretMain";
 export * from "./Welcome/Welcome";
 export * from "./ToDo/ToDo";
+export * from "./ToDo2/ToDo2";

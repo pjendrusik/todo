@@ -5,14 +5,9 @@ import Form from "react-bootstrap/Form";
 
 import {toDoService} from "services";
 import {UserContext} from "../../contexts";
-import {usePromise} from "react-use-promise-matcher";
-import Spinner from "react-bootstrap/Spinner";
 import { Formik, Form as FormikForm } from "formik";
-import {FeedbackButton, FormikInput} from "../../components";
-import {BiArrowFromBottom} from "react-icons/bi";
+import {FormikInput} from "../../components";
 import * as Yup from "yup";
-import Moment from 'react-moment';
-
 
 interface ToDoData {
   id: string;
@@ -28,20 +23,24 @@ const validationSchema = Yup.object({
 type NewToDoParams = Yup.InferType<typeof validationSchema>;
 
 
-export const ToDo: React.FC = () => {
+export const ToDo2: React.FC = () => {
   const {
     dispatch,
     state: { apiKey, user },
   } = React.useContext(UserContext);
 
-  const [todosResponse, load] = usePromise<ToDoData[], any, any>(() => toDoService.getToDo(apiKey));
+  const [todos, setToDos] = useState([]);
 
-  const [result, send, clear] = usePromise((newToDo: NewToDoParams) =>
-    toDoService.newToDo(apiKey, newToDo).then(() => load())
-  );
+  const loadToDos = () => toDoService.getToDo(apiKey).then(response => {
+    setToDos(response)
+  })
 
+  const handleSubmit = (values: NewToDoParams) => {
+    toDoService.newToDo(apiKey, values).then(() => loadToDos())
+  }
+  
   React.useEffect(() => {
-    load();
+    loadToDos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -50,12 +49,7 @@ export const ToDo: React.FC = () => {
       <Row>
         <h3>To do list:</h3>
         <div>
-          {todosResponse.match({
-            Idle: () => <></>,
-            Loading: () => <Spinner animation="border" size="sm" role="loader" />,
-            Rejected: () => <></>,
-            Resolved:  (list) => <ul>{list.map((item) => <li key={item.id}>{item.content} - <Moment format="YYYY/MM/DD">{item.createdAt}</Moment></li>)}</ul>
-          })}
+          {todos.map((item: ToDoData) => <li key={item.id}>{item.id} - {item.content}</li>)}
         </div>
       </Row>
       <Row>
@@ -64,22 +58,12 @@ export const ToDo: React.FC = () => {
           initialValues={{
             content: "",
           }}
-          onSubmit={send}
+          onSubmit={ (values) => handleSubmit(values)}
           validationSchema={validationSchema}
         >
           <Form as={FormikForm}>
             <FormikInput name="content" label="ToDo" />
-
-            <FeedbackButton
-              className="float-end"
-              type="submit"
-              label="Add todo"
-              variant="dark"
-              Icon={BiArrowFromBottom}
-              result={result}
-              clear={clear}
-              successLabel="Added new todo"
-            />
+            <button type="submit">Submit</button>
           </Form>
         </Formik>
       </Row>

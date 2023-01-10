@@ -32,6 +32,9 @@ export const Top: React.FC = () => {
             <LinkContainer to="/todo">
               <Nav.Link>ToDo</Nav.Link>
             </LinkContainer>
+            <LinkContainer to="/todo2">
+              <Nav.Link>ToDo2</Nav.Link>
+            </LinkContainer>
             <div className="flex-grow-1" />
             {loggedIn ? (
               <>
