@@ -9,4 +9,4 @@ data/
 *.bloop
 *.metals
 .bsp
-.sc
+*.sc
